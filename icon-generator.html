@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitFlow 图标生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+        }
+        .icon-container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .icon {
+            width: 192px;
+            height: 192px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+        .icon i {
+            font-size: 80px;
+            color: white;
+        }
+        .icon-512 {
+            width: 512px;
+            height: 512px;
+            border-radius: 100px;
+        }
+        .icon-512 i {
+            font-size: 200px;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #45a049;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="icon-container">
+        <h2>HabitFlow 应用图标</h2>
+        <p>点击下方按钮生成并下载应用图标</p>
+        
+        <div class="icon" id="icon192">
+            <i class="fas fa-leaf"></i>
+        </div>
+        
+        <button class="download-btn" onclick="downloadIcon(192)">下载 192x192 图标</button>
+        <button class="download-btn" onclick="downloadIcon(512)">下载 512x512 图标</button>
+        
+        <script>
+            function downloadIcon(size) {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = size;
+                canvas.height = size;
+                
+                // 创建渐变背景
+                const gradient = ctx.createLinearGradient(0, 0, size, size);
+                gradient.addColorStop(0, '#4CAF50');
+                gradient.addColorStop(1, '#45a049');
+                
+                // 绘制圆角矩形背景
+                const radius = size * 0.2;
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.roundRect(0, 0, size, size, radius);
+                ctx.fill();
+                
+                // 绘制叶子图标
+                ctx.fillStyle = 'white';
+                ctx.font = `${size * 0.4}px FontAwesome`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('🌱', size / 2, size / 2);
+                
+                // 下载图片
+                const link = document.createElement('a');
+                link.download = `icon-${size}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            }
+            
+            // 添加圆角矩形方法（兼容性）
+            if (!CanvasRenderingContext2D.prototype.roundRect) {
+                CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
+                    this.moveTo(x + radius, y);
+                    this.lineTo(x + width - radius, y);
+                    this.quadraticCurveTo(x + width, y, x + width, y + radius);
+                    this.lineTo(x + width, y + height - radius);
+                    this.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+                    this.lineTo(x + radius, y + height);
+                    this.quadraticCurveTo(x, y + height, x, y + height - radius);
+                    this.lineTo(x, y + radius);
+                    this.quadraticCurveTo(x, y, x + radius, y);
+                    this.closePath();
+                };
+            }
+        </script>
+    </div>
+</body>
+</html>

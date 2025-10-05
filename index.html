@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitFlow - 习惯流</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- PWA 配置 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="HabitFlow">
+    
+    <!-- 图标 -->
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <i class="fas fa-leaf"></i>
+                    HabitFlow
+                </h1>
+                <div class="user-stats">
+                    <span class="streak-counter">
+                        <i class="fas fa-fire"></i>
+                        <span id="totalStreak">0</span>天
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <!-- 快速添加习惯 -->
+            <section class="quick-add">
+                <div class="add-habit-form">
+                    <input type="text" id="habitInput" placeholder="添加新习惯..." maxlength="50">
+                    <select id="habitType">
+                        <option value="build">培养习惯</option>
+                        <option value="quit">戒除习惯</option>
+                    </select>
+                    <button id="addHabitBtn" class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        添加
+                    </button>
+                </div>
+            </section>
+
+            <!-- 习惯列表 -->
+            <section class="habits-section">
+                <div class="section-header">
+                    <h2>我的习惯</h2>
+                    <div class="filter-tabs">
+                        <button class="tab-btn active" data-filter="all">全部</button>
+                        <button class="tab-btn" data-filter="build">培养</button>
+                        <button class="tab-btn" data-filter="quit">戒除</button>
+                    </div>
+                </div>
+                
+                <div id="habitsList" class="habits-list">
+                    <!-- 习惯项目将通过JavaScript动态生成 -->
+                </div>
+                
+                <div id="emptyState" class="empty-state">
+                    <i class="fas fa-seedling"></i>
+                    <h3>开始您的习惯之旅</h3>
+                    <p>添加第一个习惯，开启积极的生活方式</p>
+                </div>
+            </section>
+
+            <!-- 统计面板 -->
+            <section class="stats-section">
+                <h2>今日统计</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="completedToday">0</span>
+                            <span class="stat-label">今日完成</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-target"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalHabits">0</span>
+                            <span class="stat-label">总习惯数</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="completionRate">0%</span>
+                            <span class="stat-label">完成率</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalPoints">0</span>
+                            <span class="stat-label">积分</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 成就系统 -->
+            <section class="achievements-section">
+                <h2>成就徽章</h2>
+                <div id="achievementsList" class="achievements-grid">
+                    <!-- 成就徽章将通过JavaScript动态生成 -->
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部导航 -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-page="habits">
+                <i class="fas fa-list"></i>
+                <span>习惯</span>
+            </button>
+            <button class="nav-btn" data-page="stats">
+                <i class="fas fa-chart-line"></i>
+                <span>统计</span>
+            </button>
+            <button class="nav-btn" data-page="achievements">
+                <i class="fas fa-trophy"></i>
+                <span>成就</span>
+            </button>
+            <button class="nav-btn" data-page="settings">
+                <i class="fas fa-cog"></i>
+                <span>设置</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- 习惯详情模态框 -->
+    <div id="habitModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">习惯详情</h3>
+                <button class="close-btn" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="habit-progress">
+                    <div class="progress-info">
+                        <span>连续天数: <strong id="modalStreak">0</strong></span>
+                        <span>总完成: <strong id="modalTotal">0</strong></span>
+                    </div>
+                    <div class="progress-chart">
+                        <canvas id="progressChart" width="300" height="150"></canvas>
+                    </div>
+                </div>
+                <div class="habit-actions">
+                    <button id="editHabitBtn" class="btn-secondary">
+                        <i class="fas fa-edit"></i>
+                        编辑
+                    </button>
+                    <button id="deleteHabitBtn" class="btn-danger">
+                        <i class="fas fa-trash"></i>
+                        删除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    
+    <!-- PWA Service Worker 注册 -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
