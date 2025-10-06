@@ -198,9 +198,15 @@
         
         <div class="features">
             <div class="feature">
+                <div class="feature-icon">📱</div>
+                <h3>应用主界面</h3>
+                <p>完整的习惯管理应用，包含用户注册功能</p>
+            </div>
+            
+            <div class="feature">
                 <div class="feature-icon">👥</div>
                 <h3>用户注册</h3>
-                <p>完整的用户注册系统，支持多种部署平台选择</p>
+                <p>独立的用户注册系统，支持多种部署平台</p>
             </div>
             
             <div class="feature">
@@ -208,16 +214,11 @@
                 <h3>数据分析</h3>
                 <p>实时统计和可视化用户行为数据</p>
             </div>
-            
-            <div class="feature">
-                <div class="feature-icon">🔧</div>
-                <h3>部署管理</h3>
-                <p>支持多平台部署，一键式操作</p>
-            </div>
         </div>
         
         <div class="buttons">
-            <a href="user-registration.html" class="btn btn-primary">开始注册</a>
+            <a href="app.html" class="btn btn-primary">进入应用</a>
+            <a href="user-registration.html" class="btn btn-secondary">独立注册</a>
             <a href="deployment-tracker.html" class="btn btn-secondary">查看统计</a>
         </div>
         
@@ -227,21 +228,22 @@
                 <div class="info-card">
                     <h3>🎯 核心功能</h3>
                     <ul>
+                        <li>完整的习惯管理应用</li>
                         <li>用户注册和信息管理</li>
                         <li>部署平台偏好设置</li>
                         <li>实时数据统计分析</li>
                         <li>响应式界面设计</li>
-                        <li>本地数据存储</li>
                     </ul>
                 </div>
                 
                 <div class="info-card">
-                    <h3>🌐 支持平台</h3>
+                    <h3>🌐 应用特色</h3>
                     <ul>
-                        <li>GitHub Pages - 免费简单</li>
-                        <li>Netlify - 功能强大</li>
-                        <li>Vercel - 速度极快</li>
-                        <li>Firebase - Google服务</li>
+                        <li>侧边栏导航设计</li>
+                        <li>设置页面集成注册</li>
+                        <li>仪表板数据展示</li>
+                        <li>习惯跟踪功能</li>
+                        <li>移动端完美适配</li>
                     </ul>
                 </div>
                 
@@ -249,7 +251,7 @@
                     <h3>📱 技术特性</h3>
                     <ul>
                         <li>纯前端实现，无需后端</li>
-                        <li>移动端完美适配</li>
+                        <li>本地数据存储</li>
                         <li>数据导入导出功能</li>
                         <li>实时图表可视化</li>
                         <li>自动数据备份</li>
@@ -276,12 +278,12 @@
 
     <script>
         // 检查是否有存储的用户数据
-        const userData = localStorage.getItem('habitflow_users');
-        const userCount = userData ? JSON.parse(userData).length : 0;
+        const userData = localStorage.getItem('habitflow_user_data');
+        const userCount = userData ? 1 : 0;
         
         if (userCount > 0) {
             const subtitle = document.querySelector('.subtitle');
-            subtitle.innerHTML += `<br><small style="color: #28a745;">✅ 已有 ${userCount} 位用户注册</small>`;
+            subtitle.innerHTML += `<br><small style="color: #28a745;">✅ 已有用户注册</small>`;
         }
         
         // 简单的页面访问统计
