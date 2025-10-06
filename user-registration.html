@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitFlow 用户注册系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .deployment-options {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .deployment-options h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .option-item:hover {
+            background: #e9ecef;
+        }
+
+        .option-item input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .option-item label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+
+        .records-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .records-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .record-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .record-item h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .record-item p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .record-item .deployment-choice {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 HabitFlow 用户注册</h1>
+            <p>注册并选择您的部署平台偏好</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            ✅ 注册成功！您的信息已保存。
+        </div>
+
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="username">用户名 *</label>
+                <input type="text" id="username" name="username" required placeholder="请输入用户名">
+            </div>
+
+            <div class="form-group">
+                <label for="email">邮箱地址 *</label>
+                <input type="email" id="email" name="email" required placeholder="请输入邮箱地址">
+            </div>
+
+            <div class="form-group">
+                <label for="fullname">全名</label>
+                <input type="text" id="fullname" name="fullname" placeholder="请输入您的全名">
+            </div>
+
+            <div class="deployment-options">
+                <h3>🌐 选择您偏好的部署平台</h3>
+                <div class="option-item">
+                    <input type="radio" id="github" name="deployment" value="GitHub Pages" checked>
+                    <label for="github">GitHub Pages - 免费，简单易用</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" id="netlify" name="deployment" value="Netlify">
+                    <label for="netlify">Netlify - 免费，功能强大</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" id="vercel" name="deployment" value="Vercel">
+                    <label for="vercel">Vercel - 免费，速度快</label>
+                </div>
+                <div class="option-item">
+                    <input type="radio" id="firebase" name="deployment" value="Firebase Hosting">
+                    <label for="firebase">Firebase Hosting - Google服务</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">开发经验等级</label>
+                <select id="experience" name="experience">
+                    <option value="beginner">新手 - 刚开始学习</option>
+                    <option value="intermediate">中级 - 有一定经验</option>
+                    <option value="advanced">高级 - 经验丰富</option>
+                    <option value="expert">专家 - 资深开发者</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">备注信息</label>
+                <textarea id="notes" name="notes" placeholder="请输入任何额外信息或特殊需求..."></textarea>
+            </div>
+
+            <button type="submit" class="btn">立即注册</button>
+        </form>
+
+        <div class="records-section">
+            <h2>📋 注册记录</h2>
+            <div id="recordsList">
+                <!-- 记录将在这里动态显示 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 用户注册系统
+        class UserRegistrationSystem {
+            constructor() {
+                this.records = JSON.parse(localStorage.getItem('habitflow_users') || '[]');
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.displayRecords();
+            }
+
+            bindEvents() {
+                const form = document.getElementById('registrationForm');
+                form.addEventListener('submit', (e) => this.handleSubmit(e));
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(e.target);
+                const userData = {
+                    id: Date.now().toString(),
+                    username: formData.get('username'),
+                    email: formData.get('email'),
+                    fullname: formData.get('fullname'),
+                    deployment: formData.get('deployment'),
+                    experience: formData.get('experience'),
+                    notes: formData.get('notes'),
+                    registrationDate: new Date().toLocaleString('zh-CN'),
+                    deploymentFile: '../../Desktop/HabitFlow/deploy-all.bat'
+                };
+
+                // 验证必填字段
+                if (!userData.username || !userData.email) {
+                    alert('请填写所有必填字段！');
+                    return;
+                }
+
+                // 检查用户名是否已存在
+                if (this.records.some(record => record.username === userData.username)) {
+                    alert('用户名已存在，请选择其他用户名！');
+                    return;
+                }
+
+                // 保存用户数据
+                this.saveUser(userData);
+                
+                // 显示成功消息
+                this.showSuccessMessage();
+                
+                // 重置表单
+                e.target.reset();
+                
+                // 更新记录显示
+                this.displayRecords();
+            }
+
+            saveUser(userData) {
+                this.records.unshift(userData); // 添加到数组开头
+                localStorage.setItem('habitflow_users', JSON.stringify(this.records));
+                
+                // 同时保存到文件（模拟）
+                this.saveToFile(userData);
+            }
+
+            saveToFile(userData) {
+                // 模拟保存到文件的过程
+                console.log('保存用户数据到文件:', userData);
+                
+                // 创建下载链接（实际项目中可能需要后端支持）
+                const dataStr = JSON.stringify(userData, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `habitflow_user_${userData.username}_${Date.now()}.json`;
+                
+                // 询问用户是否下载备份
+                if (confirm('是否下载用户数据备份文件？')) {
+                    link.click();
+                }
+                
+                URL.revokeObjectURL(url);
+            }
+
+            showSuccessMessage() {
+                const message = document.getElementById('successMessage');
+                message.style.display = 'block';
+                
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 5000);
+            }
+
+            displayRecords() {
+                const recordsList = document.getElementById('recordsList');
+                
+                if (this.records.length === 0) {
+                    recordsList.innerHTML = '<p style="text-align: center; color: #666;">暂无注册记录</p>';
+                    return;
+                }
+
+                recordsList.innerHTML = this.records.map(record => `
+                    <div class="record-item">
+                        <h4>👤 ${record.username} ${record.fullname ? `(${record.fullname})` : ''}</h4>
+                        <p>📧 邮箱: ${record.email}</p>
+                        <p>⏰ 注册时间: ${record.registrationDate}</p>
+                        <p>💼 经验等级: ${this.getExperienceLabel(record.experience)}</p>
+                        ${record.notes ? `<p>📝 备注: ${record.notes}</p>` : ''}
+                        <div class="deployment-choice">${record.deployment}</div>
+                    </div>
+                `).join('');
+            }
+
+            getExperienceLabel(experience) {
+                const labels = {
+                    'beginner': '新手',
+                    'intermediate': '中级',
+                    'advanced': '高级',
+                    'expert': '专家'
+                };
+                return labels[experience] || experience;
+            }
+
+            // 导出所有记录
+            exportRecords() {
+                const dataStr = JSON.stringify(this.records, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `habitflow_all_users_${Date.now()}.json`;
+                link.click();
+                
+                URL.revokeObjectURL(url);
+            }
+
+            // 清空所有记录
+            clearRecords() {
+                if (confirm('确定要清空所有注册记录吗？此操作不可逆！')) {
+                    this.records = [];
+                    localStorage.removeItem('habitflow_users');
+                    this.displayRecords();
+                }
+            }
+        }
+
+        // 初始化系统
+        const registrationSystem = new UserRegistrationSystem();
+
+        // 添加导出和清空按钮的功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加管理按钮
+            const recordsSection = document.querySelector('.records-section');
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.style.textAlign = 'center';
+            buttonsDiv.style.marginTop = '20px';
+            buttonsDiv.innerHTML = `
+                <button onclick="registrationSystem.exportRecords()" style="margin: 5px; padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">导出记录</button>
+                <button onclick="registrationSystem.clearRecords()" style="margin: 5px; padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">清空记录</button>
+            `;
+            recordsSection.appendChild(buttonsDiv);
+        });
+    </script>
+</body>
+</html>
